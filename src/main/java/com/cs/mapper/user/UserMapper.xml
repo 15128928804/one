@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cs.mapper.user.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.cs.model.user.User" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="pwd" property="pwd" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, name, pwd, address
+  </sql>
+  
+  <!-- 查询条件，精确查询 -->
+	<sql id="Example_Where_Clause">
+		where 1=1
+		<trim suffixOverrides=",">
+			<if test="id != null and id != ''">
+				and id = #{id}
+			</if>
+			<if test="name != null and name != ''">
+				and `name` = #{name}
+			</if>
+			<if test="pwd != null and pwd != ''">
+				and pwd = #{pwd}
+			</if>
+			<if test="address != null and address != ''">
+				and address = #{address}
+			</if>
+		</trim>
+	</sql>
+
+	<!-- 查询条件，模糊查询 -->
+	<sql id="Example_Where_Clause_like">
+		where 1=1
+		<trim suffixOverrides=",">
+			<if test="id != null and id != ''">
+				and id like CONCAT('%',#{id},'%')
+			</if>
+			<if test="name != null and name != ''">
+				and name like CONCAT('%',#{name},'%')
+			</if>
+			<if test="pwd != null and pwd != ''">
+				and pwd like CONCAT('%',#{pwd},'%')
+			</if>
+			<if test="address != null and address != ''">
+				and address like CONCAT('%',#{address},'%')
+			</if>
+		</trim>
+	</sql>
+	
+  <!-- 添加 -->
+  <insert id="addUser" parameterType="com.cs.model.user.User" >
+    insert into user (<include refid="Base_Column_List" />)
+     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR})
+  </insert>
+  
+  <!-- 查看全部 -->
+  <select id="queryList" resultMap="BaseResultMap" parameterType="com.cs.model.user.User">
+  	select <include refid="Base_Column_List"/> from user
+  	<if test="isExact == 'true'">
+		<include refid="Example_Where_Clause" />
+	</if>
+	<if test="isExact == 'false'">
+		<include refid="Example_Where_Clause_like" />
+	</if>
+		GROUP BY id
+	<if test="limitClause != null and limitClause != ''">
+		${limitClause}
+	</if>	
+  </select>
+  
+  <!-- 查询总数量 -->
+  <select id="queryCount" parameterType="com.cs.model.user.User" resultType="java.lang.Integer" >
+    select count(1) from user
+  </select>
+  
+  
+  <!-- 查询单条信息 -->
+  <select id="queryUser" parameterType="com.cs.model.user.User" resultMap="BaseResultMap">
+  		select <include refid="Base_Column_List"/> from user
+  			<include refid="Example_Where_Clause" />
+  </select>
+ 
+  
+  <!-- 删除 -->
+  <delete id="deleteUser" parameterType="int">
+  		delete from user where id in 
+  		<foreach collection="array" item="ids" index="index" open="("
+			close=")" separator=",">
+			#{ids}
+		</foreach>
+  </delete>
+  
+  <!-- 修改 -->
+  <update id="updateUser" parameterType="com.cs.model.user.User">
+  		update user set name=#{name}, pwd=#{pwd}, address=#{address}
+  			 where id=#{id}
+  </update>
+  
+ 
+</mapper>

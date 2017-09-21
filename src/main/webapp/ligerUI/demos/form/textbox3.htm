@@ -1,0 +1,59 @@
+<html>
+<head>
+    <title></title>
+    <link href="../../lib/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" type="text/css" />
+    <script src="../../lib/jquery/jquery-1.9.0.min.js" type="text/javascript"></script> 
+    <script src="../../lib/ligerUI/js/core/base.js" type="text/javascript"></script>
+    <script src="../../lib/ligerUI/js/plugins/ligerTextBox.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function ()
+        {
+            //���ǽ�һ��html�ı������ת����ligerui�ı������,������ligerui����
+            var g = $("#txt1").ligerTextBox(
+            {
+                //���û������ʱ,����ʾ����Ϊ��
+                nullText: '����Ϊ��'
+            });
+
+            /*
+            ��λ�ȡ����
+            */
+            //��ʽһ
+            alert('��ʽһ:' + g.get('disabled'));
+            //��ʽ��
+            alert('��ʽ��:' + $("#txt1").ligerTextBox('option', 'disabled'));
+
+             
+            /*
+            �����������
+            */
+            //��ʽһ
+            g.set('disabled', true);
+            //��ʽ�� 
+            $("#txt1").ligerTextBox('option', 'disabled', false);
+
+            /*
+            ��ε��÷���
+            */
+            //��ʽһ
+            g.setDisabled();
+            //��ʽ�� 
+            $("#txt1").ligerTextBox('setEnabled');
+             
+            /*
+            ��������¼�
+            */
+            //������ı����һ��ı�ֵ���¼�
+            //Ҳ��������onChangeValue����
+            g.bINd('changeValue', function (value)
+            {
+                alert(value);
+            });
+        }); 
+    </script>
+
+</head>
+<body style="padding:10px">
+        <input type="text" id="txt1" value="" style="width:200px"/>
+</body>
+</html>
